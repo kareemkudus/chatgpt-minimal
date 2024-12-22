@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\docs",
+    "\\docs\\images",
+    "\\public",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\HeaderBar",
+    "\\src\\models",
+    "\\src\\pages",
+    "\\src\\pages\\api"
+  ],
+  "SelectedNode": "\\src\\components\\HeaderBar\\index.tsx",
+  "PreviewInSolutionExplorer": false
+}

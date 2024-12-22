@@ -47,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
       apiUrl = `${apiBaseUrl}/v1/chat/completions`
       apiKey = process.env.OPENAI_API_KEY || ''
-      model = 'gpt-3.5-turbo' // todo: allow this to be passed through from client and support gpt-4
+      model = 'gpt-4o-2024-08-06' // todo: allow this to be passed through from client and support gpt-4
     }
     const stream = await OpenAIStream(apiUrl, apiKey, model, messagesToSend)
 
@@ -75,14 +75,13 @@ const OpenAIStream = async (apiUrl: string, apiKey: string, model: string, messa
       messages: [
         {
           role: 'system',
-          content: `You are an AI assistant that helps people find information.`
+              content: `Help me collect data from a patient, by chatting with them. I need general infomation about them (name, age, sex, address, medical conditions, etc.), name of their family doctor and all medications that they have taken over the last 5 years. Once you have all of the information thank the patient for their time and then create a summary containing all the information they have given you. If the patient provides incomplete information, or a response that doesn't make sense, ask them to clarify the information. Make sure they provide enough details for the data to be useful, for example, a full address and names.`
         },
         ...messages
       ],
       presence_penalty: 0,
       stream: true,
-      temperature: 0.7,
-      top_p: 0.95
+      temperature: 0.01
     })
   })
 
