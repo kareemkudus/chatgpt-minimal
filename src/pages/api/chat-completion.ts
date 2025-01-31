@@ -3,7 +3,7 @@ import { Message } from '@/models'
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 const axios = require('axios');
 
-const API_KEY = 'AIzaSyD0lcpuf5FgnLviI0l_2V1TIqFyCKKqElE'; // Replace with your Address Validation API key
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''; // Get API key from environment variables
 
 const validateAddress = async (address: string) => {
   const url = `https://addressvalidation.googleapis.com/v1:validateAddress?key=${API_KEY}`;
