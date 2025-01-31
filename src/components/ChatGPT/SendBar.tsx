@@ -1,14 +1,16 @@
-import React, { KeyboardEventHandler, useRef } from 'react'
+import React, { KeyboardEventHandler, useRef, useEffect } from 'react'
 
 import { ClearOutlined, SendOutlined } from '@ant-design/icons'
 
 import { ChatRole, SendBarProps } from './interface'
 import Show from './Show'
 
-const SendBar = (props: SendBarProps) => {
-  const { loading, disabled, onSend, onClear, onStop } = props
-
+const SendBar = ({ loading, disabled, onSend, onClear, onStop, messages }: SendBarProps & { messages: any[] }) => {
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [messages])
 
   const onInputAutoSize = () => {
     if (inputRef.current) {
@@ -34,6 +36,7 @@ const SendBar = (props: SendBarProps) => {
         content,
         role: ChatRole.User
       })
+      // inputRef.current.focus()
     }
   }
 
@@ -64,7 +67,7 @@ const SendBar = (props: SendBarProps) => {
           ref={inputRef!}
           className="input"
           disabled={disabled}
-          placeholder="Shift + Enter for new line"
+          placeholder="Your response goes here"
           autoComplete="off"
           rows={1}
           onKeyDown={onKeydown}

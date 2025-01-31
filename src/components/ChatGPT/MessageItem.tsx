@@ -4,7 +4,7 @@ import MarkdownIt from 'markdown-it'
 import mdHighlight from 'markdown-it-highlightjs'
 import mdKatex from 'markdown-it-katex'
 
-import { ChatMessageItemProps } from './interface'
+import { ChatMessageItemProps, ChatRole } from './interface'
 
 const md = MarkdownIt({ html: true }).use(mdKatex).use(mdHighlight)
 const fence = md.renderer.rules.fence!
@@ -25,13 +25,18 @@ md.renderer.rules.fence = (...args) => {
 const MessageItem = (props: ChatMessageItemProps) => {
   const { message } = props
 
+  // Don't render messages marked as internal
+  if (message.isInternal) {
+    return null
+  }
+
   return (
     <div className="message-item">
       <div className="meta">
         <div className="avatar">
           <span className={message.role}></span>
         </div>
-        <div className="message" dangerouslySetInnerHTML={{ __html: md.render(message.content) }} />
+        <div className="message" dangerouslySetInnerHTML={{ __html: md.render(message.content || '') }} />
       </div>
     </div>
   )

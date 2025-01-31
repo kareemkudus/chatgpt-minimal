@@ -3,11 +3,16 @@
 .chat-wrapper {
   width: 100%;
   margin: 0 auto;
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  overflow: auto;
+  position: relative;
   .message-item {
     padding: 0.5rem 0.5rem;
     border-radius: @border-radius;
     &:hover {
-      background-color: rgb(0 0 0 / 5%);
+      background-color: rgba(166, 169, 173, 0.211);
     }
     .meta {
       display: flex;
@@ -23,15 +28,33 @@
         border-radius: 50%;
       }
       .assistant {
-        background-image: linear-gradient(
-          to right,
-          rgb(232 243 173),
-          rgb(139 248 38),
-          rgb(2 168 209)
-        );
+        // background-image: linear-gradient(
+        //   to right,
+        //   rgb(232 243 173),
+        //   rgb(139 248 38),
+        //   rgb(2 168 209)
+        // );
+        background-image: url('/fawkes_logo.png');
+        background-size: cover; // Optional: to cover the entire element
+        background-repeat: no-repeat; // Optional: to prevent repeating the image
+        width: 40px; // Set a width
+        height: 40px; // Set a height
       }
       .user {
-        background-image: linear-gradient(to right, rgb(192 132 252), rgb(250 204 21));
+        background-image: linear-gradient(to right, rgba(7, 65, 120, 0.878), rgba(122, 174, 230, 0.922));
+        width: 40px; // Set a width
+        height: 40px; // Set a height
+        padding: 10px;
+        position: relative; // Ensure the pseudo-element is positioned correctly
+        &:before {
+          content: 'K'; // Replace 'U' with the desired letter
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%); // Center the letter
+          font-size: 24px; // Adjust font size as needed
+          color: white; // Change color as needed
+        }
       }
       .system {
         background-image: linear-gradient(
@@ -139,6 +162,7 @@
     grid-gap: 0.5rem;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    margin-top: auto;
     .input {
       flex: 1;
       padding: 0.75rem;
@@ -172,3 +196,4 @@
     width: 700px;
   }
 }
+

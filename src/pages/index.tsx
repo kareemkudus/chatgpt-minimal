@@ -10,8 +10,10 @@ import styles from './index.module.less'
 export default function Home() {
   return (
     <Layout hasSider className={styles.layout}>
-      <Layout>
+        <Layout className={styles.layoutInner}>
         <HeaderBar />
+        <h1 className={styles.mainHeading}>Fawkes Biodata patient intake</h1>
+        <h2 className={styles.subHeading}>We are excited to help you better manage your health</h2>
         <Content className={styles.main}>
           <ChatGPT fetchPath="/api/chat-completion" />
         </Content>

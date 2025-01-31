@@ -44,7 +44,15 @@ const requestMessage = async (
 export const useChatGPT = (props: ChatGPTProps) => {
   const { fetchPath } = props
   const [, forceUpdate] = useReducer((x) => !x, false)
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      content: 
+        "Hey there. I will be collecting some information from you today. " +
+        "Could you first please confirm your email address is " +
+        "<b>kareem.kudus@gmail.com</b> and your name is <b>Kareen Kudus</b>?",
+      role: ChatRole.Assistant
+    } 
+  ])
   const [disabled] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -56,14 +64,17 @@ export const useChatGPT = (props: ChatGPTProps) => {
     currentMessage.current = ''
     setLoading(false)
     if (content) {
+      console.log('Archiving complete message:', content)
       setMessages((messages) => {
-        return [
+        const newMessages = [
           ...messages,
           {
             content,
             role: ChatRole.Assistant
           }
         ]
+        console.log('Updated message history:', newMessages)
+        return newMessages
       })
       scrollDown()
     }
@@ -71,28 +82,45 @@ export const useChatGPT = (props: ChatGPTProps) => {
 
   const fetchMessage = async (messages: ChatMessage[]) => {
     try {
+      console.log(messages)
       currentMessage.current = ''
       controller.current = new AbortController()
       setLoading(true)
 
       const reader = await requestMessage(fetchPath, messages, controller.current)
-      const decoder = new TextDecoder('utf-8')
+      const decoder = new TextDecoder()
       let done = false
 
       while (!done) {
-        const { value, done: readerDone } = await reader.read()
+        const { value, done: doneReading } = await reader.read()
+        done = doneReading
         if (value) {
-          const char = decoder.decode(value)
-          if (char === '\n' && currentMessage.current.endsWith('\n')) {
-            continue
+          const chunkValue = decoder.decode(value)
+          
+          try {
+            // Try to parse as JSON
+            const parsedChunk = JSON.parse(chunkValue)
+            
+            // If it's an internal message, just add it to messages but don't update currentMessage
+            if (parsedChunk.isInternal) {
+              setMessages(msgs => [...msgs, parsedChunk])
+              continue
+            }
+            
+            // For normal messages, only use the parsed JSON if it has a content property
+            if (parsedChunk.content !== undefined) {
+              currentMessage.current += parsedChunk.content
+            } else {
+              // If it's parsed JSON but doesn't have content property, use the raw chunk
+              currentMessage.current += chunkValue
+            }
+          } catch (e) {
+            // If it's not valid JSON, use the raw chunk
+            currentMessage.current += chunkValue
           }
-          if (char) {
-            currentMessage.current += char
-            forceUpdate()
-          }
+          forceUpdate()
           scrollDown()
         }
-        done = readerDone
       }
 
       archiveCurrentMessage()

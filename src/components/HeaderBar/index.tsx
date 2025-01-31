@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { GithubOutlined } from '@ant-design/icons'
+import { HomeOutlined } from '@ant-design/icons'
 import { Layout, Space, Typography } from 'antd'
 
 import styles from './index.module.less'
@@ -21,13 +21,13 @@ const HeaderBar = () => {
         </div>
         <Space className={styles.right} size={0}>
           <span className={styles.right}>
-            {/*<Link*/}
-            {/*  className={styles.action}*/}
-            {/*  href="https://github.com/blrchen/chatgpt-minimal"*/}
-            {/*  target="_blank"*/}
-            {/*>*/}
-            {/*  <GithubOutlined />*/}
-            {/*</Link>*/}
+            <Link
+              className={styles.action}
+              href="https://fawkesbiodata.com/"
+              target="_blank"
+            >
+              <HomeOutlined />
+            </Link>
           </span>
         </Space>
       </Header>
